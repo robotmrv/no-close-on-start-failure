@@ -24,7 +24,7 @@ public class NoCloseOnStartFailureApplication {
 			//https://github.com/spring-cloud/spring-cloud-commons/commit/5802c0e2be792738d86509e3d2c93dcd8b997d4d#diff-344ead166eff93b62c827e6f8ff1caedR172
 			@Override
 			public void onApplicationEvent(ApplicationFailedEvent event) {
-				if (true) return;//fixme uncomment to apply WA
+				if (true) return;//fixme remove to apply WA
 				ApplicationContext context = event.getApplicationContext().getParent();
 				while (context instanceof Closeable) {
 					try {
