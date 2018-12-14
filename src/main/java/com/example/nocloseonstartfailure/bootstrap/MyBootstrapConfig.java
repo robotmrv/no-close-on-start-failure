@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.time.Duration;
 
 @EnableScheduling
@@ -16,11 +18,19 @@ public class MyBootstrapConfig {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
         scheduler.setPoolSize(5);
         scheduler.setDaemon(false);
-        scheduler.initialize();
+        return scheduler;
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        System.out.println("MyBootstrapConfig.preDestroy()");
+    }
+
+    @PostConstruct
+    public void addTask() {
+        ThreadPoolTaskScheduler scheduler = myDisposableBean();
         scheduler.scheduleAtFixedRate(() -> {
             System.out.println("ping");
         }, Duration.ofMillis(1000));
-
-        return scheduler;
     }
 }
